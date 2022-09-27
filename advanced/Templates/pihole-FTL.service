@@ -14,6 +14,8 @@ PI_HOLE_SCRIPT_DIR="/opt/pihole"
 utilsfile="${PI_HOLE_SCRIPT_DIR}/utils.sh"
 . "${utilsfile}"
 
+trap cleanup EXIT INT QUIT TERM
+
 
 is_running() {
   if [ -d "/proc/${FTL_PID}" ]; then
@@ -23,7 +25,10 @@ is_running() {
 }
 
 cleanup() {
-  rm -f /run/pihole/FTL.sock /dev/shm/FTL-* "${FTL_PID_FILE}" "${FTL_PORT_FILE}"
+    ec=$?
+    rm -f /run/pihole/FTL.sock /dev/shm/FTL-* "${FTL_PID_FILE}" "${FTL_PORT_FILE}"
+
+    exit $ec
 }
 
 # Start the service
@@ -68,7 +73,6 @@ start() {
     fi
     # Cleanup if startup failed
     if [ "${ec}" != 0 ]; then
-        cleanup
         exit "${ec}"
     fi
     echo
