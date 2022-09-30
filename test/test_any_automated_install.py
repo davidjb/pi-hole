@@ -176,9 +176,7 @@ def test_installPihole_fresh_install_readableFiles(host):
             "restart lighttpd": ("", "0"),
             "start lighttpd": ("", "0"),
             "enable pihole-FTL": ("", "0"),
-            "restart pihole-FTL": ("", "0"),
             "start pihole-FTL": ("", "0"),
-            "*": ('echo "systemctl call with $@"', "0"),
         },
         host,
     )
